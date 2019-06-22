@@ -1,5 +1,13 @@
+# sChrno
+
 # Built application files
 build/
+*.apk
+*.ap_
+*.aab
+
+# Local configuration file (sdk path, etc)
+local.properties
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -10,14 +18,21 @@ build/
 # Gradle files
 .gradle/
 
+
 # Signing files
 .signing/
 
 # User-specific configurations
 *.iml
 
-# Local configuration file (sdk path, etc)
-local.properties
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Log Files
 *.log
@@ -38,3 +53,10 @@ google-services.json
 
 # Version control
 vcs.xml
+
+# lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+lint/reports/
