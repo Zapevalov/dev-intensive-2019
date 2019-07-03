@@ -243,5 +243,52 @@ class ExampleUnitTest {
         println(textMesasge.formatMessage())
         println(imageMesasge.formatMessage())
     }
+
+
+    @Test
+    fun test_builder() {
+        val date = Date.from(Calendar.getInstance().apply { set(2019, Calendar.JUNE, 27, 14, 0, 0) }.toInstant())
+
+        val user = User.Builder().id("1")
+            .firstName("firstName")
+            .lastName("lastName")
+            .avatar("avatar")
+            .rating(1)
+            .respect(2)
+            .lastVisit(date)
+            .isOnline(true)
+            .build()
+
+        assertEquals("1", user.id)
+        assertEquals("firstName", user.firstName)
+        assertEquals("lastName", user.lastName)
+        assertEquals("avatar", user.avatar)
+        assertEquals(1, user.rating)
+        assertEquals(2, user.respect)
+        assertEquals(date, user.lastVisit)
+        assertEquals(true, user.isOnline)
+
+        val date2 = Date.from(Calendar.getInstance().apply { set(2018, Calendar.JUNE, 27, 14, 0, 0) }.toInstant())
+
+        val user2 = User.Builder().id("2")
+            .firstName("firstName2")
+            .lastName("lastName2")
+            .avatar("avatar2")
+            .rating(3)
+            .respect(4)
+            .lastVisit(date2)
+            .isOnline(false)
+            .build()
+
+        assertEquals("2", user2.id)
+        assertEquals("firstName2", user2.firstName)
+        assertEquals("lastName2", user2.lastName)
+        assertEquals("avatar2", user2.avatar)
+        assertEquals(3, user2.rating)
+        assertEquals(4, user2.respect)
+        assertEquals(date2, user2.lastVisit)
+        assertEquals(false, user2.isOnline)
+
+    }
 }
 
