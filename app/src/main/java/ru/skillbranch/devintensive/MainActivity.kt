@@ -3,8 +3,10 @@ package ru.skillbranch.devintensive
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -38,20 +40,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         benderImage = iv_bender
         textTxt = tv_text
-        messageEt = et_message
         sendBtn = iv_send
+        messageEt = et_message.apply {
+            imeOptions = IME_ACTION_DONE
+            setRawInputType(InputType.TYPE_CLASS_TEXT)
+            setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == IME_ACTION_DONE) sendBtn.performClick()
+                false
+            }
+        }
+
 
         val status = savedInstanceState?.getString("STATUS") ?: Bender.Status.NORMAL.name
         val question = savedInstanceState?.getString("QUESTION") ?: Bender.Question.NAME.name
         benderObj = Bender(status = Bender.Status.valueOf(status), question = Bender.Question.valueOf(question))
 
         Log.d("M_MainActivity", "onCreate $status $question")
-        val (r,g,b) = benderObj.status.color
-        benderImage.setColorFilter(Color.rgb(r,g,b), PorterDuff.Mode.MULTIPLY)
+        val (r, g, b) = benderObj.status.color
+        benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
 
         textTxt.text = benderObj.askQuestion()
         sendBtn.setOnClickListener(this)
-
     }
 
     /**
@@ -130,7 +139,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     /**
-     * Метод вызывается по окончании работы Активити, при вызове сетода finish() или в случае,
+     * Метод вызывается по окончании работы Активити, при вызове метода finish() или в случае,
      * когда система уничтожает этот экземпляр активности для освобождения ресурсов.
      */
     override fun onDestroy() {
@@ -140,10 +149,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.iv_send) {
-            val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString().toLowerCase())
+            val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString())
             messageEt.setText("")
-            val (r,g,b) = color
-            benderImage.setColorFilter(Color.rgb(r,g,b), PorterDuff.Mode.MULTIPLY)
+            val (r, g, b) = color
+            benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
             textTxt.text = phrase
         }
     }
@@ -159,6 +168,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onSaveInstanceState(outState)
         outState?.putString("STATUS", benderObj.status.name)
         outState?.putString("QUESTION", benderObj.question.name)
-        Log.d("M_MainActivity","onSaveInstanceState ${benderObj.status.name} ${benderObj.question.name}")
+        Log.d("M_MainActivity", "onSaveInstanceState ${benderObj.status.name} ${benderObj.question.name}")
     }
 }

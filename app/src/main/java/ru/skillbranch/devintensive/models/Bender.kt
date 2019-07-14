@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.models
 
+import android.annotation.SuppressLint
+
 class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
 
     fun askQuestion(): String =
@@ -13,9 +15,28 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
+
         return when (question) {
             Question.IDLE -> question.question to status.color
-            else -> "${checkAnswer(answer)}\n${question.question}" to status.color
+            else -> {
+                if(!question.validate(answer)){
+                    "${makeErrorMessage(question)}\n${question.question}" to status.color
+                } else {
+                    "${checkAnswer(answer.toLowerCase())}\n${question.question}" to status.color
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun makeErrorMessage(question: Question):String {
+        return when(question){
+            Question.NAME -> "Имя должно начинаться с заглавной буквы"
+            Question.PROFESSION -> "Профессия должна начинаться со строчной буквы"
+            Question.MATERIAL -> "Материал не должен содержать цифр"
+            Question.BDAY -> "Год моего рождения должен содержать только цифры"
+            Question.SERIAL -> "Серийный номер содержит только цифры, и их 7"
+            else -> "На этом все, вопросов больше нет"
         }
     }
 
