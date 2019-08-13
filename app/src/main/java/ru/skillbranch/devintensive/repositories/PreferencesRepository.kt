@@ -28,7 +28,7 @@ object PreferencesRepository {
     fun getAppTheme(): Int = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
 
 
-    fun getProfile(): Profile?  = Profile(
+    fun getProfile(): Profile  = Profile(
         prefs.getString(FIRST_NAME, "")!!,
         prefs.getString(LAST_NAME, "")!!,
         prefs.getString(ABOUT, "")!!,
